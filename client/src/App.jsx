@@ -3,16 +3,19 @@ import "./App.css";
 import Header from "./Components/Header";
 import AddTaskForm from "./Components/AddTaskForm";
 import TaskListItem from "./Components/TaskListItems";
-import displayTime from "./Components/displayTime";
+import {
+  deleteTaskRequest,
+  getTasks,
+  updateTaskList,
+} from "./axios/taskAxious";
 
 function App() {
-  const storedTaskList = JSON.parse(localStorage.getItem("taskList")) || [];
-
-  const [taskList, setTaskList] = useState(storedTaskList);
+  //state to store task list
+  const [taskList, setTaskList] = useState([]);
   console.log("taskList", taskList);
 
-  const entryTypeTask = taskList.filter((item) => item.type === "entry");
-  const unwantedTypeTask = taskList.filter((item) => item.type === "unwanted");
+  const entryTypeTask = taskList.filter((item) => item.type === "Entry");
+  const unwantedTypeTask = taskList.filter((item) => item.type === "Unwanted");
 
   //function to switch task type
   const switchTaskType = (taskId) => {
@@ -27,18 +30,38 @@ function App() {
     setTaskList(updatedTaskList);
   };
 
-  //Function to delete task
-  const deleteTask = (taskId) => {
-    const updatedTaskList = taskList.filter((task) => task.id !== taskId);
+  //update the task type
+  const updateTask = async () => {
+    const response = await updateTaskList((id, updateTask));
+    if (response.status === "success") {
+      fetchTasks();
+    }
+  };
 
-    setTaskList(updatedTaskList);
+  //use effect hook
+  const fetchTasks = async () => {
+    const response = await getTasks();
+
+    if (response.status === "success") {
+      setTaskList(response.data);
+    }
+  };
+
+  //Function to delete task
+  const deleteTask = async (taskId) => {
+    const response = await deleteTaskRequest(taskId);
+
+    if (response.status === "success") {
+      fetchTasks();
+    }
   };
 
   // useEffect hook
   useEffect(() => {
-    //updating local storage when task list is updated
-    localStorage.setItem("taskList", JSON.stringify(taskList));
-  }, [taskList]);
+    // Initailize taskList state with data from database
+    // To fetch data using API, we have to send request
+    fetchTasks();
+  }, []);
 
   return (
     <>
@@ -53,7 +76,7 @@ function App() {
             {/* <!--First Column--> */}
             <div className="col border p-4 rounded align-self-center">
               {/* <!--Form to collect user's input i.e task details--> */}
-              <AddTaskForm setTaskList={setTaskList} />
+              <AddTaskForm fetchTasks={fetchTasks} />
             </div>
             {/* <!--Second Column--> */}
             <div className="col border p-4 rounded">

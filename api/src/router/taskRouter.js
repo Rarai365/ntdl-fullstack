@@ -31,7 +31,7 @@ taskRouter.get("/:id", (req, res) => {
   getTask(req.params.id)
     .then((task) => {
       res.json({
-        staus: "success",
+        status: "success",
         data: task,
       });
     })
@@ -71,7 +71,7 @@ taskRouter.patch("/:id", (req, res) => {
   updateTask(id, updatedTask)
     .then((task) => {
       res.json({
-        staus: "success",
+        status: "success",
         data: task,
       });
     })
@@ -89,7 +89,8 @@ taskRouter.delete("/:id", (req, res) => {
   deleteTask(req.params.id)
     .then((task) => {
       res.json({
-        staus: "success",
+        status: "success",
+        message: "task deleted",
         data: task,
       });
     })

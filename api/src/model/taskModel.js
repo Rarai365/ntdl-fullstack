@@ -2,7 +2,7 @@
 //database operation
 //CRUD operation ----> Task Resources
 
-import taskModel from "../../schema/taskSchema.js";
+import taskModel from "../schema/taskSchema.js";
 
 //read
 export const getTasks = () => {
@@ -11,7 +11,7 @@ export const getTasks = () => {
 
 //read one
 export const getTask = (id) => {
-  return taskModel.findbyId(id);
+  return taskModel.findById(id);
 };
 
 //create
@@ -21,10 +21,10 @@ export const createTask = (taskObject) => {
 
 //update
 export const updateTask = (id, updateData) => {
-  return taskModel.findbyIdAndUpdate(id, updateData);
+  return taskModel.findByIdAndUpdate(id, updateData);
 };
 
 //delete
 export const deleteTask = (id) => {
-  return taskModel.findbyIdAndDelete(id);
+  return taskModel.findByIdAndDelete(id);
 };
