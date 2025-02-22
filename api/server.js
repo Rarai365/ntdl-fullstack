@@ -1,11 +1,14 @@
+import "dotenv/config";
+import path from "path";
 import express from "express";
 import cors from "cors";
 import { connectToMongoDb } from "./src/config/dbConfig.js";
 import taskRouter from "./src/router/taskRouter.js";
-import "dotenv/config";
+
+const _dirname = path.resolve();
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 //middleware to parse request
 app.use(express.json());
 
@@ -18,6 +21,9 @@ app.use(cors(corsOption));
 
 //connect to Mongo db
 connectToMongoDb();
+
+//SSR- Serve frontend usign node.js server
+app.use("/", express.static(path.join(_dirname, "dist")));
 
 //task routes
 app.use("/api/tasks", taskRouter);
