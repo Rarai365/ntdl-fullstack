@@ -1,7 +1,9 @@
 import axios from "axios";
 // this file sends api sends api for request for task resources
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.prod
+  ? "https://ntdl-fullstack-yl1w.onrender.com"
+  : import.meta.env.VITE_API_BASE_URL;
 const TASK_ENDPOINT = "/api/tasks";
 
 //fronend requests
